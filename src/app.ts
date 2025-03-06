@@ -5,7 +5,7 @@ import globalErrorHandler from './app/middlewares/globalErrorhandler';
 import notFound from './app/middlewares/notFound';
 import router from './app/routes';
 
-// import router from './app/routes';
+// udfw alfn fmkr paag
 
 
 const app: Application = express();
