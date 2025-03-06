@@ -1,5 +1,5 @@
 import { TProduct } from "./product.interface";
-import { Product } from "./product.models";
+import { Product } from "./product.model";
 
 
 

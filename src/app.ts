@@ -4,7 +4,6 @@ import express, { Application, Request } from 'express';
 import globalErrorHandler from './app/middlewares/globalErrorhandler';
 import notFound from './app/middlewares/notFound';
 import router from './app/routes';
-// import { ProductControllers } from './app/modules/product/product.controller';
 
 
 // udfw alfn fmkr paag
@@ -19,7 +18,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 // application routes
-// app.use('/api/products/new', ProductControllers.insertProduct);
+
 app.use('/api', router);
 
 

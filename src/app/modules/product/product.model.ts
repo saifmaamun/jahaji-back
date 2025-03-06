@@ -1,5 +1,3 @@
-
-
 import mongoose,{ Schema, model } from 'mongoose';
 import { TProduct, TRating, TReviews, TSize } from './product.interface';
 

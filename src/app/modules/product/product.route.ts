@@ -22,6 +22,7 @@ const router = express.Router();
 // insert product
 router.post(
     '/new',
+    
     // auth(USER_ROLE.admin),
     validateRequest(insertProductValidationSchema),
     ProductControllers.insertProduct
