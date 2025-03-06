@@ -15,7 +15,7 @@ const insertProductIntoDB = async (productData: TProduct) => {
 // fetch all product
 const getAllProductFromDB= async()=>{
     const products = await Product.find({ isDeleted: { $ne: true } });
-    console.log(products)
+    
     return products
 }
 

@@ -29,6 +29,7 @@ const insertProduct = catchAsync(async (req, res) => {
 
 // fetch All Products
 const getAllProduct = catchAsync(async(req,res)=>{
+ 
     const products = await ProductService.getAllProductFromDB();
 
      // if no data found

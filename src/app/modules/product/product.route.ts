@@ -39,4 +39,4 @@ router.get('/', ProductControllers.getAllProduct);
 
 
 
-export const AuthRoutes = router;
+export const ProductRoutes = router;
