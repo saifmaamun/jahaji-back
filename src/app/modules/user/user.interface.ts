@@ -4,9 +4,10 @@ import { USER_ROLE } from './user.constant';
 
 // user type
 export interface TUser {
-  _id: Types.ObjectId
-  googleId: string
-  displayName: string
+  _id: Types.ObjectId,
+  verificationToken:string|null,
+  googleId?: string
+  displayName?: string
   firstName?: string
   lastName?: string
   profilePhoto?: string

@@ -4,7 +4,7 @@ import sendResponse from '../../utils/sendResponse';
 import { AuthServices} from './auth.service';
 import config from '../../config';
 import { validateEmail } from './auth.utils';
-import type { Request, Response, NextFunction } from "express"
+
 
 // signup
 const signUp = catchAsync(async (req, res) => {
@@ -28,22 +28,38 @@ const signUp = catchAsync(async (req, res) => {
 
 // verify email
 const verifyEmail =  catchAsync(async (req, res) => {
-  const { email } = req.query;
-  if (!email) {
-    return sendResponse(res, {
-      statusCode: httpStatus.BAD_REQUEST,
-      success: false,
-      message: 'Email is required',
-      data: null,
-    });
+  console.log('Received verification request:', req.query);
+  const token = req.query.verificationToken as string;
+  
+
+  
+
+  // Find user by token
+  if (!token) {
+    console.log("Verification failed: Missing token")
+    return res.redirect(`${config.frontend}/verification-failed?reason=missing-token`)
   }
-  await AuthServices.verifyUserEmail(email as string);
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Email verified successfully',
-    data: null,
-  });
+  
+  
+  
+  const user = await AuthServices.verifyEmailService(token);
+  console.log("from controller",user)
+
+
+  if (!user) {
+    console.log("Verification failed: Invalid token")
+    return res.redirect(`${config.frontend}/verification-failed?reason=invalid-token`)
+  }
+
+  // Mark user as verified
+  user.isVerified = true;
+  user.verificationToken = null; // Clear the token after verification
+  await user.save();
+  console.log("User verified successfully")
+  return res.redirect(`${config.frontend}/verification-success`);
+
+
+ 
 });
 
 

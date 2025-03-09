@@ -4,20 +4,54 @@ import { TLoginUser } from './auth.interface';
 import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 import config from '../../config';
-import { createToken, generateVerificationToken, sendVerificationEmail } from './auth.utils';
+import { createToken,  sendVerificationEmail } from './auth.utils';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import crypto from 'crypto';
 
 
 // signup
 const createUserIntoDB = async (userData: TUser) => {
-  const user = await User.create(userData);
-  const token = generateVerificationToken(user.email);
-  await sendVerificationEmail(user.email, token);
+  const jwtPayload = {
+    email: userData.email,
+    role: userData.role,
+  };
+
+  const verificationToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string,
+  );;
+  const user = await User.create({
+    ...userData,
+    verificationToken,  // Store the token in the database
+    isVerified: false,  // User is not verified initially
+  });;
+  // const token = generateVerificationToken(user.email);
+  await sendVerificationEmail(user.email, verificationToken);
   // console.log('from signin',user)
   return user;
 };
 
+// verifyEmail 
+const verifyEmailService= async(token:string) =>{
+  console.log("Verification attempt with token:", token)
+    // Decode the token if it's URL encoded
+    const decodedToken = decodeURIComponent(token)
+    console.log("Decoded token:", decodedToken)
+    
+    
 
+  let user = await User.findOne({ verificationToken: token })
+
+  if (!user) {
+    user = await User.findOne({ verificationToken: decodedToken })
+    console.log("Found user with decoded token:", !!user)
+  }
+  
+  console.log('from service',user)
+  
+  return user
+}
 
 
 
@@ -27,7 +61,7 @@ const verifyUserEmail = async (email: string) => {
   if (!user) throw new Error('User not found');
   user.isVerified = true;
   await user.save();
-  // console.log(' from verify',user)
+  console.log(' from verify',user)
   return user;
 };
 
@@ -113,6 +147,7 @@ const refreshToken = async (token: string) => {
 
 export const AuthServices = {
   createUserIntoDB,
+  verifyEmailService,
   verifyUserEmail,
   loginUser,
   getAllUsersFromDB,

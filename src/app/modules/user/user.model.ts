@@ -7,8 +7,9 @@ import { TUser, UserModel } from './user.interface';
 // user Schema
 const userSchema = new Schema<TUser, UserModel>({
   // _id: { type: Types.ObjectId, auto: true }, // Auto-generate ObjectId
-  googleId: { type: String, required: true, unique: true },
-  displayName: { type: String, required: true },
+  verificationToken: { type: String,default: null,required: false },
+  googleId: { type: String,  unique: true },
+  displayName: { type: String,  },
   firstName: { type: String },
   lastName: { type: String },
   profilePhoto: { type: String },
