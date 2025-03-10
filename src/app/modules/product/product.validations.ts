@@ -52,11 +52,18 @@ export const insertProductValidationSchema = z.object({
 export const updateProductValidationSchema = z.object({
   body: z.object({
     name: z.string().trim().min(1).optional(),
-    description: z.string().trim().min(1).optional(),
-    imgUrl: z.string().trim().min(1).optional(),
-    pricePerHour: z.number().min(0).optional(),
-    location: z.string().trim().min(1).optional(),
-    isDeleted: z.boolean().optional().default(false).optional(),
+        description: z.string().trim().min(1).optional(),
+        color: z.string().trim().min(1).optional(),
+        brand: z.string().trim().min(1).optional(),
+        size: z.array(SizeSchema).min(1).optional(),
+        fabric: z.string().trim().min(1).optional(),
+        price: z.number().min(0).optional(),
+        category: z.string().trim().min(1).optional(),
+        stockSize: z.number().min(0).optional(),
+        stockStatus: z.boolean().default(true).optional(),
+        images: z.array(z.string().trim().url({ message: "Invalid image URL" })).min(1).optional(),
+        rating: RatingSchema.optional(),
+        isDeleted:z.boolean().default(false).optional(),
   }),
 });
 

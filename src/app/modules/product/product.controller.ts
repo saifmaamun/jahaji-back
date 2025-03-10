@@ -4,14 +4,6 @@ import sendResponse from "../../utils/sendResponse";
 import { ProductService } from "./product.service";
 
 
-
-
-
-
-
-
-
-
 // Product insert By Admin
 const insertProduct = catchAsync(async (req, res) => {
     console.log(req.body)
@@ -49,9 +41,47 @@ const getAllProduct = catchAsync(async(req,res)=>{
   });
 })
 
+// fetch single Products
+const getSingleProduct = catchAsync(async (req, res) => {
+  // getting the facility by id from params
+  const { id } = req.params;
+  const result = await ProductService.getSingleProductById(id);
 
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product fetched successfully',
+    data: result,
+  });
+});
 
+// update Single Product
+const updateProduct = catchAsync(async (req, res) => {
+  const { id } = req.params;
 
+  const result = await ProductService.updateProductIntoDB(id, req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product updated successfully',
+    data: result,
+  });
+});
+
+// delete Product
+const deleteProduct = catchAsync(async (req, res) => {
+  // getting the facility by id from params
+  const { id } = req.params;
+  const result = await ProductService.deleteProductFromDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product deleted successfully',
+    data: result,
+  });
+});
 
 
 
@@ -67,4 +97,7 @@ const getAllProduct = catchAsync(async(req,res)=>{
   export const ProductControllers = {
     insertProduct,
     getAllProduct,
+    getSingleProduct,
+    updateProduct,
+    deleteProduct
   };

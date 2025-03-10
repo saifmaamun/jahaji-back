@@ -2,16 +2,11 @@
 import express from 'express';
 import { ProductControllers } from './product.controller';
 import validateRequest from '../../middlewares/validateRequest';
-import { insertProductValidationSchema } from './product.validations';
+import { insertProductValidationSchema, updateProductValidationSchema } from './product.validations';
 import { USER_ROLE } from '../user/user.constant';
 import auth from '../../middlewares/auth';
 
-// Products
-// i.	GET /api/products - Fetch all products
-// ii.	GET /api/products/:id - Fetch product details
-// iii.	POST /api/products/new - Create a new product (Admin)
-// iv.	PUT /api/products/:id – Update a product (Admin)
-// v.	DELETE /api/product/:id – Delete a product (Admin)
+
 
 
 
@@ -19,21 +14,40 @@ import auth from '../../middlewares/auth';
 const router = express.Router();
 
 
+// detch single product
+router.get(
+  '/:id',
+  ProductControllers.getSingleProduct,
+);
+
+// delete product
+router.delete(
+  '/:id',
+  auth(USER_ROLE.admin),
+  ProductControllers.deleteProduct
+);
+
+// update product
+router.patch(
+  '/:id',
+  auth(USER_ROLE.admin),
+  validateRequest(updateProductValidationSchema),
+  ProductControllers.updateProduct,
+);
 
 
-// insert product
-router.post(
-    '/new',
-    
-    auth(USER_ROLE.admin),
-    validateRequest(insertProductValidationSchema),
-    ProductControllers.insertProduct
-  );
 
 
 // get alll products
 router.get('/', ProductControllers.getAllProduct);
 
+// insert product
+router.post(
+    '/new',
+    auth(USER_ROLE.admin),
+    validateRequest(insertProductValidationSchema),
+    ProductControllers.insertProduct
+  );
 
 
 
