@@ -3,6 +3,8 @@ import express from 'express';
 import { ProductControllers } from './product.controller';
 import validateRequest from '../../middlewares/validateRequest';
 import { insertProductValidationSchema } from './product.validations';
+import { USER_ROLE } from '../user/user.constant';
+import auth from '../../middlewares/auth';
 
 // Products
 // i.	GET /api/products - Fetch all products
@@ -23,7 +25,7 @@ const router = express.Router();
 router.post(
     '/new',
     
-    // auth(USER_ROLE.admin),
+    auth(USER_ROLE.admin),
     validateRequest(insertProductValidationSchema),
     ProductControllers.insertProduct
   );

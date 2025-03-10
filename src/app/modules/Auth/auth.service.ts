@@ -32,8 +32,8 @@ const createUserIntoDB = async (userData: TUser) => {
   return user;
 };
 
-// verifyEmail 
-const verifyEmailService= async(token:string) =>{
+// verification Email 
+const verificationEmailService= async(token:string) =>{
   console.log("Verification attempt with token:", token)
     // Decode the token if it's URL encoded
     const decodedToken = decodeURIComponent(token)
@@ -73,11 +73,16 @@ const loginUser = async (payload: TLoginUser) => {
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User doesn't exist!");
   }
+ // check if verified
+  if (!user.isVerified) throw new Error('Please verify your email before logging in');
 
   //save data without password
-  const userWithoutPassword = await User.findOne({ email: user.email });
+  const userData = await User.findOne({ email: user.email });
 
   //checking if the password is correct
+console.log("payload.password",payload?.password)
+console.log("user.password", user?.password)
+
   if (!(await User.isPasswordMatched(payload?.password, user?.password)))
     throw new AppError(httpStatus.FORBIDDEN, 'Wrong Password');
 
@@ -100,7 +105,7 @@ const loginUser = async (payload: TLoginUser) => {
   );
 
   return {
-    userWithoutPassword,
+    userData,
     accessToken,
     refreshToken,
   };
@@ -147,7 +152,7 @@ const refreshToken = async (token: string) => {
 
 export const AuthServices = {
   createUserIntoDB,
-  verifyEmailService,
+  verificationEmailService,
   verifyUserEmail,
   loginUser,
   getAllUsersFromDB,

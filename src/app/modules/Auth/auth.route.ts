@@ -11,17 +11,16 @@ const router = express.Router();
 
 // singup
 router.post(
-  '/signup',
+  '/register',
   validateRequest(AuthValidation.signinValidationSchema),
   AuthControllers.signUp,
 );
-
-
-
 // Verify Email
 router.get(
   '/verify-email',  AuthControllers.verifyEmail,
 );
+
+
 // login
 router.post(
   '/login',

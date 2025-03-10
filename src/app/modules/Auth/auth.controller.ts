@@ -42,7 +42,7 @@ const verifyEmail =  catchAsync(async (req, res) => {
   
   
   
-  const user = await AuthServices.verifyEmailService(token);
+  const user = await AuthServices.verificationEmailService(token);
   console.log("from controller",user)
 
 
@@ -66,7 +66,7 @@ const verifyEmail =  catchAsync(async (req, res) => {
 // login
 const loginUser = catchAsync(async (req, res) => {
   const result = await AuthServices.loginUser(req.body);
-  const { refreshToken, accessToken, userWithoutPassword } = result;
+  const { refreshToken, accessToken, userData } = result;
 
   res.cookie('refreshToken', refreshToken, {
     secure: config.NODE_ENV === 'production',
@@ -79,7 +79,7 @@ const loginUser = catchAsync(async (req, res) => {
     message: 'User is logged in succesfully!',
     token: accessToken,
     data: {
-      userWithoutPassword,
+      userData
     },
   });
 });
