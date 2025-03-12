@@ -36,6 +36,7 @@ const productSchema = new Schema<TProduct>({
     category: { type: String, required: true },
     stockSize: { type: Number, required: true },
     stockStatus: { type: Boolean, required: true },
+    coverImage: { type: String, required: true }, // Cover image
     images: [{ type: String, required: true }], // Array of image URLs
     rating: { type: RatingSchema, default: { average: 0, count: 0, reviews: [] } },
     isDeleted:  { type: Boolean, required: true },
