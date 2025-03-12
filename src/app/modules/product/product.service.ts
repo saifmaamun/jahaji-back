@@ -13,10 +13,17 @@ const insertProductIntoDB = async (productData: TProduct) => {
 
 
 // fetch all product
-const getAllProductFromDB= async()=>{
-    const products = await Product.find({ isDeleted: { $ne: true } });
-    
-    return products
+const getAllProductFromDB = async () => {
+  const products = await Product.find({ isDeleted: { $ne: true } });
+
+  return products
+}
+
+// get limited product
+const getLimitedProductFromDB = async (limit: number) => {
+  const products = await Product.find({ isDeleted: { $ne: true } }).limit(limit);
+
+  return products
 }
 
 
@@ -55,10 +62,10 @@ const deleteProductFromDB = async (id: string) => {
 
 
 export const ProductService = {
-    insertProductIntoDB,
-    getAllProductFromDB,
-    getSingleProductById,
-    updateProductIntoDB,
-    deleteProductFromDB
-  };
-  
+  insertProductIntoDB,
+  getAllProductFromDB,
+  getLimitedProductFromDB,
+  getSingleProductById,
+  updateProductIntoDB,
+  deleteProductFromDB
+};

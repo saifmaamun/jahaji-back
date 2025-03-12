@@ -6,25 +6,32 @@ import { ProductService } from "./product.service";
 
 // Product insert By Admin
 const insertProduct = catchAsync(async (req, res) => {
-    console.log(req.body)
-    
-    const product = await ProductService.insertProductIntoDB(req.body);
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'Product added successfully. ',
-      data: product,
-    });
+  console.log(req.body)
+
+  const product = await ProductService.insertProductIntoDB(req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product added successfully. ',
+    data: product,
   });
+});
 
 
 
 // fetch All Products
-const getAllProduct = catchAsync(async(req,res)=>{
- 
-    const products = await ProductService.getAllProductFromDB();
+const getAllProduct = catchAsync(async (req, res) => {
 
-     // if no data found
+  const { limit } = req.query
+  let products;
+
+  if (limit) {
+    products = await ProductService.getLimitedProductFromDB(Number(limit));
+  } else {
+    products = await ProductService.getAllProductFromDB();
+  }
+
+  // if no data found
   if (products.length == 0) {
     sendResponse(res, {
       statusCode: httpStatus.NOT_FOUND,
@@ -94,10 +101,10 @@ const deleteProduct = catchAsync(async (req, res) => {
 
 
 
-  export const ProductControllers = {
-    insertProduct,
-    getAllProduct,
-    getSingleProduct,
-    updateProduct,
-    deleteProduct
-  };
+export const ProductControllers = {
+  insertProduct,
+  getAllProduct,
+  getSingleProduct,
+  updateProduct,
+  deleteProduct
+};
