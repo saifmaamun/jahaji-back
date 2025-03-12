@@ -1,44 +1,40 @@
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
-import express, { Application, Request } from 'express';
-import globalErrorHandler from './app/middlewares/globalErrorhandler';
-import notFound from './app/middlewares/notFound';
-import router from './app/routes';
-import config from './app/config';
-
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const cors_1 = __importDefault(require("cors"));
+const express_1 = __importDefault(require("express"));
+const globalErrorhandler_1 = __importDefault(require("./app/middlewares/globalErrorhandler"));
+const notFound_1 = __importDefault(require("./app/middlewares/notFound"));
+const routes_1 = __importDefault(require("./app/routes"));
 // udfw alfn fmkr paag
-
-
-const app: Application = express();
-
+const app = (0, express_1.default)();
 //parsers
-app.use(express.json());
-app.use(cookieParser());
-app.use(cors())
+app.use(express_1.default.json());
+app.use((0, cookie_parser_1.default)());
+app.use((0, cors_1.default)());
 // app.use(cors({
 //     origin: [`${config.frontend}`], // Specify frontend URL
 //     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 //     credentials: true // Allows cookies & headers
 //   }));
-app.use(express.urlencoded({ extended: true }));
-
+app.use(express_1.default.urlencoded({ extended: true }));
 // application routes
 // app.use((req, res, next) => {
 //     console.log('Received Request:', req.method, req.url);
 //     next();
 //   });
-app.use('/api', router);
-
-
-app.get('/', (req: Request, res) => {
-  res.send(`
+app.use('/api', routes_1.default);
+app.get('/', (req, res) => {
+    res.send(`
     <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jahaji - Backend Overview</title>
+    <title>Fashion - Backend Overview</title>
     <style>
         * {
             margin: 0;
@@ -179,11 +175,7 @@ app.get('/', (req: Request, res) => {
 
                 `);
 });
-
-
-app.use(globalErrorHandler);
-
+app.use(globalErrorhandler_1.default);
 //Not Found
-app.use(notFound);
-
-export default app;
+app.use(notFound_1.default);
+exports.default = app;
